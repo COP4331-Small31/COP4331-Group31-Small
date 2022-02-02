@@ -1,4 +1,4 @@
-const urlBase = 'http://www.31contacts.tk/';
+const urlBase = 'http://31contacts.tk/';
 const extension = 'php';
 
 let userId = 0;
@@ -12,8 +12,10 @@ function doLogin()
 	lastName = "";
 
 	let login = document.getElementById("loginName").value;
+//	alert(login);
 	let password = document.getElementById("loginPassword").value;
 	var hash = md5( password );
+//	alert(password);
 
 	document.getElementById("loginResult").innerHTML = "";
 
@@ -26,7 +28,8 @@ function doLogin()
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", url, true);
 	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
-	// xhr.setRequestHeader("Access-Control-Allow-Origin", url);
+
+//	xhr.setRequestHeader("Access-Control-Allow-Origin", url);
 	try
 	{
 		xhr.onreadystatechange = function()
@@ -56,6 +59,75 @@ function doLogin()
 	{
 		document.getElementById("loginResult").innerHTML = err.message;
 	}
+
+}
+
+function doSignUp()
+{
+    userId = 0;
+    firstName = "";
+    lastName = "";
+
+    window.location.href = "register.html";
+}
+
+function doRegister()
+{
+    userId = 0;
+    firstName = "";
+    lastName = "";
+
+    firstName = document.getElementById("firstName").value;
+    lastName = document.getElementById("lastName").value;
+    let login = document.getElementById("loginName").value;
+    let password = document.getElementById("loginPassword").value;
+    var hash = md5( password );
+
+		if (firstName!="" && lastName!="" && login!="" && password!=""){
+		    document.getElementById("registerResult").innerHTML = "";
+
+		    let tmp = {firstName:firstName,lastName:lastName,login:login,password:hash};
+		//    var tmp = {login:login,password:hash};
+		    let jsonPayload = JSON.stringify( tmp );
+
+		    let url = urlBase + 'LAMPAPI/Register.' + extension;
+
+		    let xhr = new XMLHttpRequest();
+		    xhr.open("POST", url, true);
+		    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+		    // xhr.setRequestHeader("Access-Control-Allow-Origin", url);
+		    try
+		    {
+		        xhr.onreadystatechange = function()
+		        {
+		            if (this.readyState == 4 && this.status == 200)
+		            {
+		//                let jsonObject = JSON.parse( xhr.responseText );
+		//                userId = jsonObject.id;
+
+		//                if( userId > 0 )
+		//                {
+		                  document.getElementById("registerResult").innerHTML = "Your account has been created!";
+		//                    return;
+		//                }
+
+		//                firstName = jsonObject.firstName;
+		//                lastName = jsonObject.lastName;
+
+		//                saveCookie();
+
+		//                window.location.href = "index.html";
+		            }
+		        };
+		        xhr.send(jsonPayload);
+		    }
+		    catch(err)
+		    {
+		        document.getElementById("registerResult").innerHTML = err.message;
+		    }
+		} else {
+				document.getElementById("registerResult").innerHTML = "Looks like some of your info is missing!";
+		}
 
 }
 
@@ -111,31 +183,39 @@ function doLogout()
 
 function addColor()
 {
-	let newColor = document.getElementById("colorText").value;
+	let firstName = document.getElementById("firstName").value;
+  let lastName = document.getElementById("lastName").value;
+  let email = document.getElementById("email").value;
+  let phone = document.getElementById("phone").value;
+
 	document.getElementById("colorAddResult").innerHTML = "";
 
-	let tmp = {user:1, firstName:newColor, lastName:"Parker", email:"1@yahoo.com", phone:3333333333 };
-	let jsonPayload = JSON.stringify( tmp );
+	if (firstName!="" && lastName!="" && email!="" && phone!="") {
+	  let tmp = {user:1, firstName:firstName, lastName:lastName, email:email, phone:phone};
+		let jsonPayload = JSON.stringify( tmp );
 
-	let url = urlBase + 'LAMPAPI/AddContact.' + extension;
+		let url = urlBase + 'LAMPAPI/AddContact.' + extension;
 
-	let xhr = new XMLHttpRequest();
-	xhr.open("POST", url, true);
-	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
-	try
-	{
-		xhr.onreadystatechange = function()
+		let xhr = new XMLHttpRequest();
+		xhr.open("POST", url, true);
+		xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+		try
 		{
-			if (this.readyState == 4 && this.status == 200)
+			xhr.onreadystatechange = function()
 			{
-				document.getElementById("colorAddResult").innerHTML = "Contact has been added";
-			}
-		};
-		xhr.send(jsonPayload);
-	}
-	catch(err)
-	{
-		document.getElementById("colorAddResult").innerHTML = err.message;
+				if (this.readyState == 4 && this.status == 200)
+				{
+					document.getElementById("colorAddResult").innerHTML = "Contact has been added";
+				}
+			};
+			xhr.send(jsonPayload);
+		}
+		catch(err)
+		{
+			document.getElementById("colorAddResult").innerHTML = err.message;
+		}
+	} else {
+		document.getElementById("colorAddResult").innerHTML = "Looks like some contact info is missing!";
 	}
 
 }
@@ -161,7 +241,7 @@ function searchColor()
 		{
 			if (this.readyState == 4 && this.status == 200)
 			{
-				document.getElementById("colorSearchResult").innerHTML = "Contact(s) have been retrieved";
+				document.getElementById("colorSearchResult").innerHTML = "Contacts(s) have been retrieved";
 				let jsonObject = JSON.parse( xhr.responseText );
 
 				for( let i=0; i<jsonObject.results.length; i++ )
