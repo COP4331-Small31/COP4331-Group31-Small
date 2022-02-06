@@ -1,23 +1,45 @@
 <?php
 	$inData = getRequestInfo();
-
-	$user = $inData["user"];
+	
+	$UID = $inData["UID"]; 
 	$firstName = $inData["firstName"];
 	$lastName = $inData["lastName"];
 	$email = $inData["email"];
 	$phone = $inData["phone"];
 
-	$conn = new mysqli("localhost", "TheBeast", "WeLoveCOP4331", "COP4331");
-	if ($conn->connect_error)
+	$conn = new mysqli("localhost", "TheBeast", "WeLoveCOP4331", "COP4331"); 	
+	if ($conn->connect_error) 
 	{
 		returnWithError( $conn->connect_error );
-	}
+	} 
 	else
 	{
-		$stmt = $conn->prepare("INSERT into Contacts (User,FirstName,LastName,Email,Phone) VALUES(?,?,?,?,?)");
-		$stmt->bind_param("sssss", $user, $firstName, $lastName, $email, $phone);
-		$stmt->execute();
-		$stmt->close();
+		/* $stmt = $conn->prepare("UPDATE from Users WHERE Login=? AND Password=?");
+		$stmt->bind_param("sss", $id, $login, $password);
+		$stmt->execute(); */
+
+		if (isset($firstName))
+		{
+			$stmt = $conn->prepare("UPDATE Contacts SET FirstName=? WHERE UID=?");
+			$stmt->bind_param("ss", $firstName, $UID);
+			$stmt->execute();
+		}
+
+		if (isset($lastName))
+		{
+
+		}
+
+		if (isset($email))
+		{
+			
+		}
+
+		if (isset($phone))
+		{
+			
+		}
+
 		$conn->close();
 		returnWithError("");
 	}
@@ -30,14 +52,13 @@
 	function sendResultInfoAsJson( $obj )
 	{
 		header('Content-type: application/json');
-
 		echo $obj;
 	}
-
+	
 	function returnWithError( $err )
 	{
 		$retValue = '{"error":"' . $err . '"}';
 		sendResultInfoAsJson( $retValue );
 	}
-
+	
 ?>

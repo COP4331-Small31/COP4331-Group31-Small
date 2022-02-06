@@ -1,6 +1,9 @@
 body 
 {
-    background-color: #707070;
+    background-repeat: repeat;
+    background-size: 107% 105%;
+    width: 100%;
+    height: 100%;
 }
 
 #title 
@@ -13,13 +16,20 @@ body
     color: #FFFFFF;
 }
 
+p
+{
+    color: #ffffff;
+}
+
 #loginDiv
 {
     font-size: 30px;
     width: 70%;
     margin-left: 15%;
     padding: 25px;
-    background-color: #b2b2b2;
+    background-color: #00000063;
+    border-radius: 15px;
+    font-family: 'Ubuntu', sans-serif;
 }
 
 #loggedInDiv
@@ -28,7 +38,8 @@ body
     width: 70%;
     margin-left: 15%;
     padding: 25px;
-    background-color: #b2b2b2;
+    background-color: #00000063;
+    border-radius: 15px;
 }
 
 #accessUIDiv
@@ -37,44 +48,129 @@ body
     width: 70%;
     margin-left: 15%;
     padding: 25px;
-    background-color: #b2b2b2;
+    background-color: #00000063;
+    border-radius: 15px;
+}
+
+#colorList
+{
+    font-size: 30px;
+    width: inherit;
+    overflow:auto; 
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 5%;
+    margin-bottom: 0%;
+    padding: 25px;
+    background-color: #00000063;
+    border-radius: 15px;
+}
+
+.contactslist  
+{
+    font-size: 30px;
+    width: inherit;
+    overflow:auto; 
+    margin-left: 15%;
+    padding: 25px;
+    background-color: #00000063;
+    border-radius: 15px;
+}
+
+.contact
+{
+    display: table-row;
+    background-color: #00000063;
+}
+
+#firstName{
+    background-color: #000000;
+    border-radius: 15px;
+    color: #FFFFFF;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 30px;
+}
+
+#lastName{
+    background-color: #000000;
+    border-radius: 15px;
+    color: #FFFFFF;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 30px;
+}
+
+#email{
+    background-color: #000000;
+    border-radius: 15px;
+    color: #FFFFFF;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 30px;
+}
+
+#phone{
+    background-color: #000000;
+    border-radius: 15px;
+    color: #FFFFFF;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 30px;
 }
 
 .buttons
 {
-    font-size: 30px;
-    border-radius: 25px;
+    font-size: 20px;
+    border-radius: 7px;
+    padding: 10px;
     width: 50%;
     margin-left: 25%;
     font-family: 'Ubuntu', sans-serif;
+    background-color: #5dbeff;
+    color: #FFFFFF;
 }
 
 .buttons:hover{
-    background-color: #00d5124f;
+    background-color: #00d512;
     color: #FFFFFF;
-    opacity: 50%;
+    opacity: 90%;
+}
+
+.buttonsTitle{
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 40px;
+    width: 50%;
+    padding: 0;
+    border: none;
+    opacity: 100%;
+    align-items: center;
+    background: rgb(0 0 0 / 0%); 
+    color:rgb(255 255 255);
 }
 
 #loginName
 {
 	font-size: 30px;
+   	border-radius: 7px;
 }
 #loginPassword
 {
 	font-size: 30px;
+	border-radius: 7px;
 }
 #searchText
 {
 	font-size: 30px;
+        border-radius: 7px;
 }
 #colorText
 {
 	font-size: 30px;
+        border-radius: 7px;
 }
 
 input[type="text"],input[type="password"]{
-    border-radius: 25px;
-    text-align: center;
+    border-radius: 7px;
+    padding: 1px;
+    font-size:100%;
+    text-align: left;
     width: 80%;
     margin-left: 10%;
     margin-bottom: 2%;
@@ -89,7 +185,7 @@ input[type="text"],input[type="password"]{
     margin-left: 5%;
     margin-bottom: 2%;
     font-family: 'Ubuntu', sans-serif;
-    color: #95060a;
+    color: #ffffff;
 }
 
 #loginResult{
@@ -103,16 +199,41 @@ input[type="text"],input[type="password"]{
     color: #95060a;
 }
 
+#registerResult{
+    display: inline-block;
+    font-size: 0.8em;
+    width: 90%;
+    text-align: center;
+    margin-left: 5%;
+    margin-bottom: 2%;
+    font-family: 'Ubuntu', sans-serif;
+    color: #95060a;
+}
+
 #userName{
     display: inline-block;
+    padding: 20px;
     width: 80%;
     margin-left: 10%;
     text-align: center;
+    color: #FFFFFF;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 30px;
 }
 
 #logoutButton{
     width: 20%;
     margin-left: 40%;
+}
+
+#deleteUserButton{
+    width: 30%;
+    margin-left: 35%;
+}
+
+#updateUserButton{
+    width: 30%;
+    margin-left: 35%;
 }
 
 select{

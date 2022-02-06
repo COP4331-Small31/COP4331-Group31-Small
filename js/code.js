@@ -1,5 +1,8 @@
-const urlBase = 'http://www.31contacts.tk/';
+const urlBase = 'http://31contacts.tk/';
 const extension = 'php';
+
+// INSECURE IMPLEMENTATION OF ACCESS CONTROL ALLOWED ORIGIN HEADERS
+//res.setHeader("Access-Control-Allow-Origin", "*");
 
 let userId = 0;
 let firstName = "";
@@ -12,8 +15,10 @@ function doLogin()
 	lastName = "";
 
 	let login = document.getElementById("loginName").value;
+//	alert(login);
 	let password = document.getElementById("loginPassword").value;
 	var hash = md5( password );
+//	alert(password);
 
 	document.getElementById("loginResult").innerHTML = "";
 
@@ -26,7 +31,10 @@ function doLogin()
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", url, true);
 	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
-	// xhr.setRequestHeader("Access-Control-Allow-Origin", url);
+
+// THIS IS INSECURE?
+//	xhr.setRequestHeader("Access-Control-Allow-Origin", url);
+
 	try
 	{
 		xhr.onreadystatechange = function()
@@ -56,6 +64,75 @@ function doLogin()
 	{
 		document.getElementById("loginResult").innerHTML = err.message;
 	}
+
+}
+
+function doSignUp()
+{
+    userId = 0;
+    firstName = "";
+    lastName = "";
+
+    window.location.href = "register.html";
+}
+
+function doRegister()
+{
+    userId = 0;
+    firstName = "";
+    lastName = "";
+
+    firstName = document.getElementById("userFirstName").value;
+    lastName = document.getElementById("userLastName").value;
+    let login = document.getElementById("loginName").value;
+    let password = document.getElementById("loginPassword").value;
+    var hash = md5( password );
+
+		if (firstName!="" && lastName!="" && login!="" && password!=""){
+		    document.getElementById("registerResult").innerHTML = "";
+
+		    let tmp = {firstName:firstName,lastName:lastName,login:login,password:hash};
+		//    var tmp = {login:login,password:hash};
+		    let jsonPayload = JSON.stringify( tmp );
+
+		    let url = urlBase + 'LAMPAPI/Register.' + extension;
+
+		    let xhr = new XMLHttpRequest();
+		    xhr.open("POST", url, true);
+		    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+		    // xhr.setRequestHeader("Access-Control-Allow-Origin", url);
+		    try
+		    {
+		        xhr.onreadystatechange = function()
+		        {
+		            if (this.readyState == 4 && this.status == 200)
+		            {
+		//                let jsonObject = JSON.parse( xhr.responseText );
+		//                userId = jsonObject.id;
+
+		//                if( userId > 0 )
+		//                {
+		                  document.getElementById("registerResult").innerHTML = "Your account has been created!";
+		//                    return;
+		//                }
+
+		//                firstName = jsonObject.firstName;
+		//                lastName = jsonObject.lastName;
+
+		//                saveCookie();
+
+		                  window.location.href = "index.html";
+		            }
+		        };
+		        xhr.send(jsonPayload);
+		    }
+		    catch(err)
+		    {
+		        document.getElementById("registerResult").innerHTML = err.message;
+		    }
+		} else {
+				document.getElementById("registerResult").innerHTML = "Looks like some of your info is missing!";
+		}
 
 }
 
@@ -109,36 +186,54 @@ function doLogout()
 	window.location.href = "index.html";
 }
 
+function doGoToUpdate()
+{
+        userId = 0;
+        firstName = "";
+        lastName = "";
+        document.cookie = "firstName= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+        window.location.href = "update.html";
+}
+
 function addColor()
 {
-	let newColor = document.getElementById("colorText").value;
+	let firstName = document.getElementById("newFirstName").value;
+  let lastName = document.getElementById("newLastName").value;
+  let email = document.getElementById("newEmail").value;
+  let phone = document.getElementById("newPhone").value;
+
 	document.getElementById("colorAddResult").innerHTML = "";
 
-	let tmp = {color:newColor,userId,userId};
-	let jsonPayload = JSON.stringify( tmp );
+	if (firstName!="" && lastName!="" && email!="" && phone!="") {
+	  let tmp = {user:userId, firstName:firstName, lastName:lastName, email:email, phone:phone};
+		let jsonPayload = JSON.stringify( tmp );
 
-	let url = urlBase + '/AddColor.' + extension;
+		let url = urlBase + 'LAMPAPI/AddContact.' + extension;
 
-	let xhr = new XMLHttpRequest();
-	xhr.open("POST", url, true);
-	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
-	try
-	{
-		xhr.onreadystatechange = function()
+		let xhr = new XMLHttpRequest();
+		xhr.open("POST", url, true);
+		xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+		try
 		{
-			if (this.readyState == 4 && this.status == 200)
+			xhr.onreadystatechange = function()
 			{
-				document.getElementById("colorAddResult").innerHTML = "Color has been added";
-			}
-		};
-		xhr.send(jsonPayload);
-	}
-	catch(err)
-	{
-		document.getElementById("colorAddResult").innerHTML = err.message;
+				if (this.readyState == 4 && this.status == 200)
+				{
+					document.getElementById("colorAddResult").innerHTML = "Contact has been added";
+				}
+			};
+			xhr.send(jsonPayload);
+		}
+		catch(err)
+		{
+			document.getElementById("colorAddResult").innerHTML = err.message;
+		}
+	} else {
+		document.getElementById("colorAddResult").innerHTML = "Looks like some contact info is missing!";
 	}
 
 }
+
 
 function searchColor()
 {
@@ -147,10 +242,10 @@ function searchColor()
 
 	let colorList = "";
 
-	let tmp = {search:srch,userId:userId};
+	let tmp = {search:srch,user:userId};
 	let jsonPayload = JSON.stringify( tmp );
 
-	let url = urlBase + '/SearchColors.' + extension;
+	let url = urlBase + 'LAMPAPI/SearchContacts.' + extension;
 
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", url, true);
@@ -161,19 +256,54 @@ function searchColor()
 		{
 			if (this.readyState == 4 && this.status == 200)
 			{
-				document.getElementById("colorSearchResult").innerHTML = "Color(s) has been retrieved";
+				document.getElementById("colorSearchResult").innerHTML = "Contact(s) have been retrieved";
 				let jsonObject = JSON.parse( xhr.responseText );
+
+
+				// This section takes care of formatting the HTML for the contacts list
+				let contactslistelement = document.getElementById("colorList");
+				// .appendChild(document.createElement("div"));
+				// contactslistelement.setAttribute("class", "contactslist");
+
+				let e = document.querySelector('#colorList');
+
+				var child = e.firstChild;
+
+				// This section clears contact list before every search
+				while (child) {
+						e.removeChild(child);
+						child = e.firstChild;
+				 }
 
 				for( let i=0; i<jsonObject.results.length; i++ )
 				{
-					colorList += jsonObject.results[i];
-					if( i < jsonObject.results.length - 1 )
-					{
-						colorList += "<br />\r\n";
-					}
+					let  contactelement = contactslistelement.appendChild(document.createElement("div"));
+					contactelement.setAttribute("style", "width: 1200px; float:left; height:100px; margin:10px");
+					contactelement.setAttribute("id", "contact"+i);
+					contactelement.setAttribute("class", "contact");
+
+					let  firstnameelement = contactelement.appendChild(document.createElement("div"));
+					firstnameelement.setAttribute("style", "width: 200px; float:left; height:50px; margin:10px");
+					// firstnameelement.setAttribute("style", "width: 200px; float:left; height:50px; background:CYAN; margin:10px");
+					firstnameelement.setAttribute("id", "firstName");
+          firstnameelement.innerHTML = jsonObject.results[i].first_name;
+
+					let  lastnameelement = contactelement.appendChild(document.createElement("div"));
+					lastnameelement.setAttribute("style", "width: 200px; float:left; height:50px; margin:10px");
+					lastnameelement.setAttribute("id", "lastName");
+					lastnameelement.innerHTML = jsonObject.results[i].last_name;
+
+          let  emailelement = contactelement.appendChild(document.createElement("div"));
+					emailelement.setAttribute("style", "width: 450px; float:left; height:50px; margin:10px");
+					emailelement.setAttribute("id", "email");
+          emailelement.innerHTML = jsonObject.results[i].email;
+
+					let  phoneelement = contactelement.appendChild(document.createElement("div"));
+					phoneelement.setAttribute("style", "width: 200px; float:left; height:50px; margin:10px");
+					phoneelement.setAttribute("id", "phone");
+					phoneelement.innerHTML = jsonObject.results[i].phone;
 				}
 
-				document.getElementsByTagName("p")[0].innerHTML = colorList;
 			}
 		};
 		xhr.send(jsonPayload);
