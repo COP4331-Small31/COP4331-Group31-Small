@@ -55,7 +55,7 @@ function doLogin()
 
 				saveCookie();
 
-				window.location.href = "color.html";
+				window.location.href = "contacts.html";
 			}
 		};
 		xhr.send(jsonPayload);
@@ -195,14 +195,14 @@ function doGoToUpdate()
         window.location.href = "update.html";
 }
 
-function addColor()
+function addContact()
 {
 	let firstName = document.getElementById("newFirstName").value;
-  let lastName = document.getElementById("newLastName").value;
-  let email = document.getElementById("newEmail").value;
-  let phone = document.getElementById("newPhone").value;
+	let lastName = document.getElementById("newLastName").value;
+	let email = document.getElementById("newEmail").value;
+	let phone = document.getElementById("newPhone").value;
 
-	document.getElementById("colorAddResult").innerHTML = "";
+	document.getElementById("contactAddResult").innerHTML = "";
 
 	if (firstName!="" && lastName!="" && email!="" && phone!="") {
 	  let tmp = {user:userId, firstName:firstName, lastName:lastName, email:email, phone:phone};
@@ -219,28 +219,28 @@ function addColor()
 			{
 				if (this.readyState == 4 && this.status == 200)
 				{
-					document.getElementById("colorAddResult").innerHTML = "Contact has been added";
+					document.getElementById("contactAddResult").innerHTML = "Contact has been added";
 				}
 			};
 			xhr.send(jsonPayload);
 		}
 		catch(err)
 		{
-			document.getElementById("colorAddResult").innerHTML = err.message;
+			document.getElementById("contactAddResult").innerHTML = err.message;
 		}
 	} else {
-		document.getElementById("colorAddResult").innerHTML = "Looks like some contact info is missing!";
+		document.getElementById("contactAddResult").innerHTML = "Looks like some contact info is missing!";
 	}
 
 }
 
 
-function searchColor()
+function searchContacts()
 {
 	let srch = document.getElementById("searchText").value;
-	document.getElementById("colorSearchResult").innerHTML = "";
+	document.getElementById("contactsSearchResult").innerHTML = "";
 
-	let colorList = "";
+	let contactsList = "";
 
 	let tmp = {search:srch,user:userId};
 	let jsonPayload = JSON.stringify( tmp );
@@ -256,52 +256,53 @@ function searchColor()
 		{
 			if (this.readyState == 4 && this.status == 200)
 			{
-				document.getElementById("colorSearchResult").innerHTML = "Contact(s) have been retrieved";
+				// document.getElementById("contactsSearchResult").innerHTML = "Contact(s) have been retrieved";
 				let jsonObject = JSON.parse( xhr.responseText );
 
 
 				// This section takes care of formatting the HTML for the contacts list
-				let contactslistelement = document.getElementById("colorList");
+				let contactsListElement = document.getElementById("contactsList");
 				// .appendChild(document.createElement("div"));
 				// contactslistelement.setAttribute("class", "contactslist");
 
-				let e = document.querySelector('#colorList');
+				let e = document.querySelector('#contactsList');
 
 				var child = e.firstChild;
 
 				// This section clears contact list before every search
 				while (child) {
-						e.removeChild(child);
-						child = e.firstChild;
-				 }
+					e.removeChild(child);
+					child = e.firstChild;
+				}
 
 				for( let i=0; i<jsonObject.results.length; i++ )
 				{
-					let  contactelement = contactslistelement.appendChild(document.createElement("div"));
-					contactelement.setAttribute("style", "width: 1200px; float:left; height:100px; margin:10px");
-					contactelement.setAttribute("id", "contact"+i);
-					contactelement.setAttribute("class", "contact");
+					let contactElement = contactsListElement.appendChild(document.createElement("div"));
+					contactElement.setAttribute("style", "width: 1200px; float:left; height:100px; margin:10px");
+					contactElement.setAttribute("id", "contact"+i);
+					contactElement.setAttribute("class", "contact");
 
-					let  firstnameelement = contactelement.appendChild(document.createElement("div"));
-					firstnameelement.setAttribute("style", "width: 200px; float:left; height:50px; margin:10px");
+					let firstNameElement = contactElement.appendChild(document.createElement("div"));
+					firstNameElement.setAttribute("style", "width: 200px; float:left; height:50px; margin:10px");
 					// firstnameelement.setAttribute("style", "width: 200px; float:left; height:50px; background:CYAN; margin:10px");
-					firstnameelement.setAttribute("id", "firstName");
-          firstnameelement.innerHTML = jsonObject.results[i].first_name;
+					firstNameElement.setAttribute("id", "firstName");
+					firstNameElement.innerHTML = jsonObject.results[i].firstName;
 
-					let  lastnameelement = contactelement.appendChild(document.createElement("div"));
-					lastnameelement.setAttribute("style", "width: 200px; float:left; height:50px; margin:10px");
-					lastnameelement.setAttribute("id", "lastName");
-					lastnameelement.innerHTML = jsonObject.results[i].last_name;
+					let lastNameElement = contactElement.appendChild(document.createElement("div"));
+					lastNameElement.setAttribute("style", "width: 200px; float:left; height:50px; margin:10px");
+					lastNameElement.setAttribute("id", "lastName");
+					lastNameElement.innerHTML = jsonObject.results[i].lastName;
 
-          let  emailelement = contactelement.appendChild(document.createElement("div"));
-					emailelement.setAttribute("style", "width: 450px; float:left; height:50px; margin:10px");
-					emailelement.setAttribute("id", "email");
-          emailelement.innerHTML = jsonObject.results[i].email;
+					let emailElement = contactElement.appendChild(document.createElement("div"));
+					emailElement.setAttribute("style", "width: 450px; float:left; height:50px; margin:10px");
+					emailElement.setAttribute("id", "email");
+					emailElement.innerHTML = jsonObject.results[i].email;
 
-					let  phoneelement = contactelement.appendChild(document.createElement("div"));
-					phoneelement.setAttribute("style", "width: 200px; float:left; height:50px; margin:10px");
-					phoneelement.setAttribute("id", "phone");
-					phoneelement.innerHTML = jsonObject.results[i].phone;
+					let phoneElement = contactElement.appendChild(document.createElement("div"));
+					phoneElement.setAttribute("style", "width: 200px; float:left; height:50px; margin:10px");
+					phoneElement.setAttribute("id", "phone");
+					let phoneNumber = jsonObject.results[i].phone;
+					phoneElement.innerHTML = phoneNumber.substring(0, 3) + "-" + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10);
 				}
 
 			}
@@ -310,7 +311,7 @@ function searchColor()
 	}
 	catch(err)
 	{
-		document.getElementById("colorSearchResult").innerHTML = err.message;
+		document.getElementById("contactsSearchResult").innerHTML = err.message;
 	}
 
 }

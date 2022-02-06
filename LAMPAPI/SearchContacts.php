@@ -28,8 +28,8 @@
 			}
 			$searchCount++;
 			// figure out how we want to format the json
-			$searchResults .= '{"first_name" : "' . $row["FirstName"] . '",';
-			$searchResults .= '"last_name" : "' . $row["LastName"] . '",';
+			$searchResults .= '{"firstName" : "' . $row["FirstName"] . '",';
+			$searchResults .= '"lastName" : "' . $row["LastName"] . '",';
 			$searchResults .= '"email" : "' . $row["Email"] . '",';
 			$searchResults .= '"phone" : "' . $row["Phone"] . '"}';
 		}
