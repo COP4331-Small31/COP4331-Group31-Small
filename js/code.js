@@ -204,18 +204,11 @@ function addColor()
 
 	document.getElementById("colorAddResult").innerHTML = "";
 
-<<<<<<< HEAD
 	if (firstName!="" && lastName!="" && email!="" && phone!="") {
 	  let tmp = {user:userId, firstName:firstName, lastName:lastName, email:email, phone:phone};
 		let jsonPayload = JSON.stringify( tmp );
 
 		let url = urlBase + 'LAMPAPI/AddContact.' + extension;
-=======
-	let tmp = {user:1, firstName:newColor, lastName:"Parker", email:"1@yahoo.com", phone:3333333333 };
-	let jsonPayload = JSON.stringify( tmp );
-
-	let url = urlBase + 'LAMPAPI/AddContact.' + extension;
->>>>>>> 3261248d409f7d69db7a60c3497ed496c4dcf09f
 
 		let xhr = new XMLHttpRequest();
 		xhr.open("POST", url, true);
@@ -224,7 +217,6 @@ function addColor()
 		{
 			xhr.onreadystatechange = function()
 			{
-<<<<<<< HEAD
 				if (this.readyState == 4 && this.status == 200)
 				{
 					document.getElementById("colorAddResult").innerHTML = "Contact has been added";
@@ -238,16 +230,6 @@ function addColor()
 		}
 	} else {
 		document.getElementById("colorAddResult").innerHTML = "Looks like some contact info is missing!";
-=======
-				document.getElementById("colorAddResult").innerHTML = "Contact has been added";
-			}
-		};
-		xhr.send(jsonPayload);
-	}
-	catch(err)
-	{
-		document.getElementById("colorAddResult").innerHTML = err.message;
->>>>>>> 3261248d409f7d69db7a60c3497ed496c4dcf09f
 	}
 
 }
