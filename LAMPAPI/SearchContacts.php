@@ -13,9 +13,9 @@
 	else
 	{
 		// currently searches first name
-		$stmt = $conn->prepare("select FirstName, LastName, Email, Phone from Contacts where FirstName like ? and User=?");
-		$contactName = "%" . $inData["search"] . "%";
-		$stmt->bind_param("ss", $contactName, $inData["user"]);
+		$stmt = $conn->prepare("select FirstName, LastName, Email, Phone from Contacts where (FirstName like ? or LastName like ? or Email like ? or Phone like ?) and User=?");
+		$search = "%" . $inData["search"] . "%";
+		$stmt->bind_param("sssss", $search, $search, $search, $search, $inData["user"]);
 		$stmt->execute();
 
 		$result = $stmt->get_result();
@@ -28,10 +28,10 @@
 			}
 			$searchCount++;
 			// figure out how we want to format the json
-			$searchResults .= '"' . $row["FirstName"] . '",';
-			$searchResults .= '"' . $row["LastName"] . '",';
-			$searchResults .= '"' . $row["Email"] . '",';
-			$searchResults .= '"' . $row["Phone"] . '"';
+			$searchResults .= '{"firstName" : "' . $row["FirstName"] . '",';
+			$searchResults .= '"lastName" : "' . $row["LastName"] . '",';
+			$searchResults .= '"email" : "' . $row["Email"] . '",';
+			$searchResults .= '"phone" : "' . $row["Phone"] . '"}';
 		}
 
 		if( $searchCount == 0 )

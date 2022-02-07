@@ -2,7 +2,7 @@ const urlBase = 'http://31contacts.tk/';
 const extension = 'php';
 
 // INSECURE IMPLEMENTATION OF ACCESS CONTROL ALLOWED ORIGIN HEADERS
-//res.setHeader("Access-Control-Allow-Origin", "*");
+//res.setHeader("Access-Control-Allow-Origin", "*"); 
 
 let userId = 0;
 let firstName = "";
@@ -32,8 +32,9 @@ function doLogin()
 	xhr.open("POST", url, true);
 	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
 
-// THIS IS INSECURE?
-//	xhr.setRequestHeader("Access-Control-Allow-Origin", url);
+// THIS IS INSECURE
+
+	xhr.setRequestHeader("Access-Control-Allow-Origin", url);
 
 	try
 	{
@@ -55,7 +56,7 @@ function doLogin()
 
 				saveCookie();
 
-				window.location.href = "contacts.html";
+				window.location.href = "color.html";
 			}
 		};
 		xhr.send(jsonPayload);
@@ -186,23 +187,14 @@ function doLogout()
 	window.location.href = "index.html";
 }
 
-function doGoToUpdate()
-{
-        userId = 0;
-        firstName = "";
-        lastName = "";
-        document.cookie = "firstName= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
-        window.location.href = "update.html";
-}
-
-function addContact()
+function addColor()
 {
 	let firstName = document.getElementById("newFirstName").value;
-	let lastName = document.getElementById("newLastName").value;
-	let email = document.getElementById("newEmail").value;
-	let phone = document.getElementById("newPhone").value;
+  let lastName = document.getElementById("newLastName").value;
+  let email = document.getElementById("newEmail").value;
+  let phone = document.getElementById("newPhone").value;
 
-	document.getElementById("contactAddResult").innerHTML = "";
+	document.getElementById("colorAddResult").innerHTML = "";
 
 	if (firstName!="" && lastName!="" && email!="" && phone!="") {
 	  let tmp = {user:userId, firstName:firstName, lastName:lastName, email:email, phone:phone};
@@ -219,28 +211,28 @@ function addContact()
 			{
 				if (this.readyState == 4 && this.status == 200)
 				{
-					document.getElementById("contactAddResult").innerHTML = "Contact has been added";
+					document.getElementById("colorAddResult").innerHTML = "Contact has been added";
 				}
 			};
 			xhr.send(jsonPayload);
 		}
 		catch(err)
 		{
-			document.getElementById("contactAddResult").innerHTML = err.message;
+			document.getElementById("colorAddResult").innerHTML = err.message;
 		}
 	} else {
-		document.getElementById("contactAddResult").innerHTML = "Looks like some contact info is missing!";
+		document.getElementById("colorAddResult").innerHTML = "Looks like some contact info is missing!";
 	}
 
 }
 
 
-function searchContacts()
+function searchColor()
 {
 	let srch = document.getElementById("searchText").value;
-	document.getElementById("contactsSearchResult").innerHTML = "";
+	document.getElementById("colorSearchResult").innerHTML = "";
 
-	let contactsList = "";
+	let colorList = "";
 
 	let tmp = {search:srch,user:userId};
 	let jsonPayload = JSON.stringify( tmp );
@@ -256,53 +248,52 @@ function searchContacts()
 		{
 			if (this.readyState == 4 && this.status == 200)
 			{
-				// document.getElementById("contactsSearchResult").innerHTML = "Contact(s) have been retrieved";
+				document.getElementById("colorSearchResult").innerHTML = "Contact(s) have been retrieved";
 				let jsonObject = JSON.parse( xhr.responseText );
 
 
 				// This section takes care of formatting the HTML for the contacts list
-				let contactsListElement = document.getElementById("contactsList");
+				let contactslistelement = document.getElementById("colorList");
 				// .appendChild(document.createElement("div"));
 				// contactslistelement.setAttribute("class", "contactslist");
 
-				let e = document.querySelector('#contactsList');
+				let e = document.querySelector('#colorList');
 
 				var child = e.firstChild;
 
 				// This section clears contact list before every search
 				while (child) {
-					e.removeChild(child);
-					child = e.firstChild;
-				}
+						e.removeChild(child);
+						child = e.firstChild;
+				 }
 
 				for( let i=0; i<jsonObject.results.length; i++ )
 				{
-					let contactElement = contactsListElement.appendChild(document.createElement("div"));
-					contactElement.setAttribute("style", "width: 1200px; float:left; height:100px; margin:10px");
-					contactElement.setAttribute("id", "contact"+i);
-					contactElement.setAttribute("class", "contact");
+					let  contactelement = contactslistelement.appendChild(document.createElement("div"));
+					contactelement.setAttribute("style", "width: 1200px; float:left; height:100px; margin:10px");
+					contactelement.setAttribute("id", "contact"+i);
+					contactelement.setAttribute("class", "contact");
 
-					let firstNameElement = contactElement.appendChild(document.createElement("div"));
-					firstNameElement.setAttribute("style", "width: 200px; float:left; height:50px; margin:10px");
+					let  firstnameelement = contactelement.appendChild(document.createElement("div"));
+					firstnameelement.setAttribute("style", "width: 200px; float:left; height:50px; margin:10px");
 					// firstnameelement.setAttribute("style", "width: 200px; float:left; height:50px; background:CYAN; margin:10px");
-					firstNameElement.setAttribute("id", "firstName");
-					firstNameElement.innerHTML = jsonObject.results[i].firstName;
+					firstnameelement.setAttribute("id", "firstName");
+          firstnameelement.innerHTML = jsonObject.results[i].first_name;
 
-					let lastNameElement = contactElement.appendChild(document.createElement("div"));
-					lastNameElement.setAttribute("style", "width: 200px; float:left; height:50px; margin:10px");
-					lastNameElement.setAttribute("id", "lastName");
-					lastNameElement.innerHTML = jsonObject.results[i].lastName;
+					let  lastnameelement = contactelement.appendChild(document.createElement("div"));
+					lastnameelement.setAttribute("style", "width: 200px; float:left; height:50px; margin:10px");
+					lastnameelement.setAttribute("id", "lastName");
+					lastnameelement.innerHTML = jsonObject.results[i].last_name;
 
-					let emailElement = contactElement.appendChild(document.createElement("div"));
-					emailElement.setAttribute("style", "width: 450px; float:left; height:50px; margin:10px");
-					emailElement.setAttribute("id", "email");
-					emailElement.innerHTML = jsonObject.results[i].email;
+          let  emailelement = contactelement.appendChild(document.createElement("div"));
+					emailelement.setAttribute("style", "width: 450px; float:left; height:50px; margin:10px");
+					emailelement.setAttribute("id", "email");
+          emailelement.innerHTML = jsonObject.results[i].email;
 
-					let phoneElement = contactElement.appendChild(document.createElement("div"));
-					phoneElement.setAttribute("style", "width: 200px; float:left; height:50px; margin:10px");
-					phoneElement.setAttribute("id", "phone");
-					let phoneNumber = jsonObject.results[i].phone;
-					phoneElement.innerHTML = phoneNumber.substring(0, 3) + "-" + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10);
+					let  phoneelement = contactelement.appendChild(document.createElement("div"));
+					phoneelement.setAttribute("style", "width: 200px; float:left; height:50px; margin:10px");
+					phoneelement.setAttribute("id", "phone");
+					phoneelement.innerHTML = jsonObject.results[i].phone;
 				}
 
 			}
@@ -311,7 +302,7 @@ function searchContacts()
 	}
 	catch(err)
 	{
-		document.getElementById("contactsSearchResult").innerHTML = err.message;
+		document.getElementById("colorSearchResult").innerHTML = err.message;
 	}
 
 }

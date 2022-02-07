@@ -1,6 +1,9 @@
 body 
 {
-    background-color: #707070;
+    background-repeat: repeat;
+    background-size: 107% 105%;
+    width: 100%;
+    height: 100%;
 }
 
 #title 
@@ -26,6 +29,7 @@ p
     padding: 25px;
     background-color: #00000063;
     border-radius: 15px;
+    font-family: 'Ubuntu', sans-serif;
 }
 
 #loggedInDiv
@@ -46,6 +50,69 @@ p
     padding: 25px;
     background-color: #00000063;
     border-radius: 15px;
+}
+
+#colorList
+{
+    font-size: 30px;
+    width: inherit;
+    overflow:auto; 
+    margin-left: 10%;
+    margin-right: 10%;
+    margin-top: 5%;
+    margin-bottom: 0%;
+    padding: 25px;
+    background-color: #00000063;
+    border-radius: 15px;
+}
+
+.contactslist  
+{
+    font-size: 30px;
+    width: inherit;
+    overflow:auto; 
+    margin-left: 15%;
+    padding: 25px;
+    background-color: #00000063;
+    border-radius: 15px;
+}
+
+.contact
+{
+    display: table-row;
+    background-color: #00000063;
+}
+
+#firstName{
+    background-color: #000000;
+    border-radius: 15px;
+    color: #FFFFFF;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 30px;
+}
+
+#lastName{
+    background-color: #000000;
+    border-radius: 15px;
+    color: #FFFFFF;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 30px;
+}
+
+#email{
+    background-color: #000000;
+    border-radius: 15px;
+    color: #FFFFFF;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 30px;
+}
+
+#phone{
+    background-color: #000000;
+    border-radius: 15px;
+    color: #FFFFFF;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 30px;
 }
 
 .buttons
@@ -150,11 +217,23 @@ input[type="text"],input[type="password"]{
     margin-left: 10%;
     text-align: center;
     color: #FFFFFF;
+    font-family: 'Ubuntu', sans-serif;
+    font-size: 30px;
 }
 
 #logoutButton{
     width: 20%;
     margin-left: 40%;
+}
+
+#deleteUserButton{
+    width: 30%;
+    margin-left: 35%;
+}
+
+#updateUserButton{
+    width: 30%;
+    margin-left: 35%;
 }
 
 select{
