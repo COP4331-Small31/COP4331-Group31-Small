@@ -1,8 +1,8 @@
 <?php
 	$inData = getRequestInfo();
 	
-	$login = $inData["login"];
-	$password = $inData["password"];
+	$firstName = $inData["firstName"];
+	$id = $inData["id"];
 
 	$conn = new mysqli("localhost", "TheBeast", "WeLoveCOP4331", "COP4331"); 	
 	if ($conn->connect_error) 
@@ -11,8 +11,8 @@
 	} 
 	else
 	{
-		$stmt = $conn->prepare("DELETE from Users WHERE Login=? AND Password=?");
-		$stmt->bind_param("ss", $login, $password);
+		$stmt = $conn->prepare("DELETE from Users WHERE FirstName=? AND ID=?");
+		$stmt->bind_param("ss", $firstName, $id);
 		$stmt->execute();
 		$stmt->close();
 		$conn->close();

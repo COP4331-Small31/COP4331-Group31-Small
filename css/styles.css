@@ -1,261 +1,171 @@
-body 
-{
-    background-repeat: repeat;
-    background-size: 107% 105%;
-    width: 100%;
+* {
+    padding: 0px;
+    margin: 0px;
+    box-sizing: border-box;
+}
+
+body, html {
     height: 100%;
 }
 
-#title 
-{
-    font-size: 40px;
-    width: 100%;
-    margin: 2% 5%;
-    text-align: center;
-    font-family: 'Ubuntu', sans-serif;
-    color: #FFFFFF;
-}
-
-p
-{
-    color: #ffffff;
-}
-
-#loginDiv
-{
-    font-size: 30px;
-    width: 70%;
-    margin-left: 15%;
-    padding: 25px;
-    background-color: #00000063;
-    border-radius: 15px;
-    font-family: 'Ubuntu', sans-serif;
-}
-
-#loggedInDiv
-{
-    font-size: 30px;
-    width: 70%;
-    margin-left: 15%;
-    padding: 25px;
-    background-color: #00000063;
-    border-radius: 15px;
-}
-
-#accessUIDiv
-{
-    font-size: 30px;
-    width: 70%;
-    margin-left: 15%;
-    padding: 25px;
-    background-color: #00000063;
-    border-radius: 15px;
-}
-
-#colorList
-{
-    font-size: 30px;
-    width: inherit;
-    overflow:auto; 
-    margin-left: 10%;
-    margin-right: 10%;
-    margin-top: 5%;
-    margin-bottom: 0%;
-    padding: 25px;
-    background-color: #00000063;
-    border-radius: 15px;
-}
-
-.contactslist  
-{
-    font-size: 30px;
-    width: inherit;
-    overflow:auto; 
-    margin-left: 15%;
-    padding: 25px;
-    background-color: #00000063;
-    border-radius: 15px;
-}
-
-.contact
-{
-    display: table-row;
-    background-color: #00000063;
-}
-
-#firstName{
-    background-color: #000000;
-    border-radius: 15px;
-    color: #FFFFFF;
-    font-family: 'Ubuntu', sans-serif;
-    font-size: 30px;
-}
-
-#lastName{
-    background-color: #000000;
-    border-radius: 15px;
-    color: #FFFFFF;
-    font-family: 'Ubuntu', sans-serif;
-    font-size: 30px;
-}
-
-#email{
-    background-color: #000000;
-    border-radius: 15px;
-    color: #FFFFFF;
-    font-family: 'Ubuntu', sans-serif;
-    font-size: 30px;
-}
-
-#phone{
-    background-color: #000000;
-    border-radius: 15px;
-    color: #FFFFFF;
-    font-family: 'Ubuntu', sans-serif;
-    font-size: 30px;
-}
-
-.buttons
-{
-    font-size: 20px;
-    border-radius: 7px;
-    padding: 10px;
-    width: 50%;
-    margin-left: 25%;
-    font-family: 'Ubuntu', sans-serif;
-    background-color: #5dbeff;
-    color: #FFFFFF;
-}
-
-.buttons:hover{
-    background-color: #00d512;
-    color: #FFFFFF;
-    opacity: 90%;
-}
-
-.buttonsTitle{
-    font-family: 'Ubuntu', sans-serif;
-    font-size: 40px;
-    width: 50%;
-    padding: 0;
-    border: none;
-    opacity: 100%;
+#background-image {
+    background-image: url("images/background.jpg");
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-attachment: scroll;
+    overflow-x: scroll;
+    position: relative;
+    display: flex;
+    flex-direction: column;
     align-items: center;
-    background: rgb(0 0 0 / 0%); 
-    color:rgb(255 255 255);
 }
 
-#loginName
-{
-	font-size: 30px;
-   	border-radius: 7px;
-}
-#loginPassword
-{
-	font-size: 30px;
-	border-radius: 7px;
-}
-#searchText
-{
-	font-size: 30px;
-        border-radius: 7px;
-}
-#colorText
-{
-	font-size: 30px;
-        border-radius: 7px;
+#name {
+    font-size: 5em;
+    font-family: 'Oswald', sans-serif;
+    color: #f1f1f1;
+    text-align: center;
+    padding: 30px 0px 0px 0px;
+    margin: 10px;
+    width: 500px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-input[type="text"],input[type="password"]{
-    border-radius: 7px;
-    padding: 1px;
-    font-size:100%;
+#subtitle {
+    font-size: 2.5em;
+    font-family: 'Oswald', sans-serif;
+    color: #f1f1f1;
+    text-align: center;
+    padding: 0px 0px 50px 0px;
+}
+
+.fields {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+#inner-title {
+    font-size: 2em;
+    font-family: 'Oswald', sans-serif;
+    color: #f1f1f1;
+    padding: 30px;
+    border: none;
+    border-radius: 4px;
+}
+
+.field-text {
+    font-size: 1.5em;
+    font-family: 'Oswald', sans-serif;
+    color: #f1f1f1;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+}
+
+.inputs {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+input {
+    font-size: 1.5em;
+    font-family: 'Oswald', sans-serif;
+    color: #333333;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    margin: 10px;
+    background-color: #f1f1f1;
+}
+
+
+
+.button {
+    font-size: 1.5em;
+    font-family: 'Oswald', sans-serif;
+    padding: 10px 20px;
+    border: solid;
+    border-radius: 4px;
+    margin: 40px 10px;
+    transition-duration: 0.2s;
+    color: #f1f1f1;
+    border-color: #f1f1f1;
+    background-color: #442266;
+}
+
+.button:hover {
+    background-color: #f1f1f1;
+    color: #333333;
+}
+
+.delete-button {
+    font-size: 1.5em;
+    font-family: 'Oswald', sans-serif;
+    color: #f1f1f1;
+    padding: 10px 20px;
+    border: solid;
+    border-radius: 4px;
+    border-color: #bb0000;
+    margin: 40px 10px;
+    background-color: #bb0000;
+    transition-duration: 0.2s;
+}
+
+.delete-button:hover {
+    background-color: #f1f1f1;
+    color: #bb0000;
+}
+
+#searchFieldText {
+    font-size: 2em;
+}
+
+#searchText {
+    width: 400px;
+}
+
+.edit-button {
+    font-size: 1em;
+    font-family: 'Oswald', sans-serif;
+    color: #f1f1f1;
+    padding: 7px 14px;
+    border: solid;
+    border-radius: 4px;
+    border-color: #442266;
+    background-color: #442266;
+    transition-duration: 0.2s;
+}
+
+.edit-button:hover {
+    background-color: #f1f1f1;
+    color: #333333;
+}
+
+#contactsList {
+    font-size: 1.5em;
+    font-family: 'Oswald', sans-serif;
+    color: #333333;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    margin: 20px;
+    background-color: #f1f1f1;
     text-align: left;
-    width: 80%;
-    margin-left: 10%;
-    margin-bottom: 2%;
-    font-family: 'Ubuntu', sans-serif;
-}
-
-#inner-title{
-    display: inline-block;
-    font-size: 0.8em;
-    width: 90%;
-    text-align: center;
-    margin-left: 5%;
-    margin-bottom: 2%;
-    font-family: 'Ubuntu', sans-serif;
-    color: #ffffff;
-}
-
-#loginResult{
-    display: inline-block;
-    font-size: 0.8em;
-    width: 90%;
-    text-align: center;
-    margin-left: 5%;
-    margin-bottom: 2%;
-    font-family: 'Ubuntu', sans-serif;
-    color: #95060a;
-}
-
-#registerResult{
-    display: inline-block;
-    font-size: 0.8em;
-    width: 90%;
-    text-align: center;
-    margin-left: 5%;
-    margin-bottom: 2%;
-    font-family: 'Ubuntu', sans-serif;
-    color: #95060a;
-}
-
-#userName{
-    display: inline-block;
-    padding: 20px;
-    width: 80%;
-    margin-left: 10%;
-    text-align: center;
-    color: #FFFFFF;
-    font-family: 'Ubuntu', sans-serif;
-    font-size: 30px;
-}
-
-#logoutButton{
-    width: 20%;
-    margin-left: 40%;
-}
-
-#deleteUserButton{
-    width: 30%;
-    margin-left: 35%;
-}
-
-#updateUserButton{
-    width: 30%;
-    margin-left: 35%;
-}
-
-select{
-    width: 30%;
-    margin-left: 35%;
-    margin-top: 2%;
-    font-size: 0.75em;
-    font-family: 'Ubuntu', sans-serif;
-}
-
-#colorSearchResult{
     display: none;
 }
 
-#colorAddResult{
-    display: inline-block;
-    font-size: 0.8em;
-    width: 90%;
-    text-align: center;
-    margin-left: 5%;
-    margin-top: 2%;
-    margin-bottom: 1%;
-    font-family: 'Ubuntu', sans-serif;
-    color: #95060a;
+th {
+    padding: 15px;
+    font-size: 1.25em;
+}
+
+td {
+    padding: 15px;
 }

@@ -15,15 +15,12 @@ function doLogin()
 	lastName = "";
 
 	let login = document.getElementById("loginName").value;
-//	alert(login);
 	let password = document.getElementById("loginPassword").value;
 	var hash = md5( password );
-//	alert(password);
 
 	document.getElementById("loginResult").innerHTML = "";
 
 	let tmp = {login:login,password:hash};
-//	var tmp = {login:login,password:hash};
 	let jsonPayload = JSON.stringify( tmp );
 
 	let url = urlBase + 'LAMPAPI/Login.' + extension;
@@ -167,13 +164,14 @@ function readCookie()
 		}
 	}
 
-	if( userId < 0 )
+	if (userId < 0)
 	{
 		window.location.href = "index.html";
 	}
 	else
 	{
 		document.getElementById("userName").innerHTML = "Logged in as " + firstName + " " + lastName;
+		searchContacts();
 	}
 }
 
@@ -234,7 +232,6 @@ function addContact()
 
 }
 
-
 function searchContacts()
 {
 	let srch = document.getElementById("searchText").value;
@@ -259,11 +256,8 @@ function searchContacts()
 				// document.getElementById("contactsSearchResult").innerHTML = "Contact(s) have been retrieved";
 				let jsonObject = JSON.parse( xhr.responseText );
 
-
 				// This section takes care of formatting the HTML for the contacts list
 				let contactsListElement = document.getElementById("contactsList");
-				// .appendChild(document.createElement("div"));
-				// contactslistelement.setAttribute("class", "contactslist");
 
 				let e = document.querySelector('#contactsList');
 
@@ -275,36 +269,60 @@ function searchContacts()
 					child = e.firstChild;
 				}
 
-				for( let i=0; i<jsonObject.results.length; i++ )
-				{
-					let contactElement = contactsListElement.appendChild(document.createElement("div"));
-					contactElement.setAttribute("style", "width: 1200px; float:left; height:100px; margin:10px");
-					contactElement.setAttribute("id", "contact"+i);
-					contactElement.setAttribute("class", "contact");
+				if ("results" in jsonObject) {
+					contactsListElement.style.display = "block";
 
-					let firstNameElement = contactElement.appendChild(document.createElement("div"));
-					firstNameElement.setAttribute("style", "width: 200px; float:left; height:50px; margin:10px");
-					// firstnameelement.setAttribute("style", "width: 200px; float:left; height:50px; background:CYAN; margin:10px");
-					firstNameElement.setAttribute("id", "firstName");
-					firstNameElement.innerHTML = jsonObject.results[i].firstName;
+					let contactsHeader = contactsListElement.appendChild(document.createElement("tr"));
+					contactsHeader.setAttribute("id", "contactsHeader");
 
-					let lastNameElement = contactElement.appendChild(document.createElement("div"));
-					lastNameElement.setAttribute("style", "width: 200px; float:left; height:50px; margin:10px");
-					lastNameElement.setAttribute("id", "lastName");
-					lastNameElement.innerHTML = jsonObject.results[i].lastName;
+					let firstNameHeader = contactsHeader.appendChild(document.createElement("th"));
+					firstNameHeader.innerHTML = "First Name";
+					let lastNameHeader = contactsHeader.appendChild(document.createElement("th"));
+					lastNameHeader.innerHTML = "Last Name";
+					let emailHeader = contactsHeader.appendChild(document.createElement("th"));
+					emailHeader.innerHTML = "Email";
+					let phoneHeader = contactsHeader.appendChild(document.createElement("th"));
+					phoneHeader.innerHTML = "Phone";
 
-					let emailElement = contactElement.appendChild(document.createElement("div"));
-					emailElement.setAttribute("style", "width: 450px; float:left; height:50px; margin:10px");
-					emailElement.setAttribute("id", "email");
-					emailElement.innerHTML = jsonObject.results[i].email;
+					for (let i = 0; i < jsonObject.results.length; i++)
+					{
+						let contactElement = contactsListElement.appendChild(document.createElement("tr"));
+						contactElement.setAttribute("id", "contact"+i);
+						contactElement.setAttribute("class", "contact");
 
-					let phoneElement = contactElement.appendChild(document.createElement("div"));
-					phoneElement.setAttribute("style", "width: 200px; float:left; height:50px; margin:10px");
-					phoneElement.setAttribute("id", "phone");
-					let phoneNumber = jsonObject.results[i].phone;
-					phoneElement.innerHTML = phoneNumber.substring(0, 3) + "-" + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10);
+						let firstNameElement = contactElement.appendChild(document.createElement("td"));
+						firstNameElement.setAttribute("id", "firstName");
+						firstNameElement.innerHTML = jsonObject.results[i].firstName;
+
+						let lastNameElement = contactElement.appendChild(document.createElement("td"));
+						lastNameElement.setAttribute("id", "lastName");
+						lastNameElement.innerHTML = jsonObject.results[i].lastName;
+
+						let emailElement = contactElement.appendChild(document.createElement("td"));
+						emailElement.setAttribute("id", "email");
+						let emailLink = emailElement.appendChild(document.createElement("a"));
+						emailLink.href = "mailto:" + jsonObject.results[i].email;
+						emailLink.innerHTML = jsonObject.results[i].email;
+
+						let phoneElement = contactElement.appendChild(document.createElement("td"));
+						phoneElement.setAttribute("id", "phone");
+						let phoneNumber = jsonObject.results[i].phone;
+						phoneElement.innerHTML = phoneNumber.substring(0, 3) + "-" + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10);
+
+						let updateElement = contactElement.appendChild(document.createElement("td"));
+						updateElement.setAttribute("id", "update");
+						let updateButton = updateElement.appendChild(document.createElement("button"));
+						updateButton.setAttribute("type", "button");
+						updateButton.setAttribute("id", "editContactButton");
+						updateButton.setAttribute("class", "edit-button");
+						updateButton.setAttribute("onclick", "doGoToUpdateContact();");
+						updateButton.innerHTML = "Edit";
+					}
+				} else {
+					// TODO: if no results, display text showing that
+					document.getElementById("contactsSearchResult").innerHTML = "No Contacts Found"
+					contactsListElement.style.display = "none";
 				}
-
 			}
 		};
 		xhr.send(jsonPayload);
@@ -314,4 +332,30 @@ function searchContacts()
 		document.getElementById("contactsSearchResult").innerHTML = err.message;
 	}
 
+}
+
+function doDeleteUser(){
+    var result = confirm('Are you sure you want to delete your account?');
+    if (result == true){
+        readCookie();
+        let tmp = {firstname:firstName,id:userId};
+        let jsonPayload = JSON.stringify( tmp );
+
+        let url = urlBase + 'LAMPAPI/DeleteUser.' + extension;
+
+        let xhr = new XMLHttpRequest();
+        xhr.open("POST", url, true);
+        xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+
+        try
+        {
+            xhr.send(jsonPayload);
+            window.location.href = "index.html";
+            alert('Sorry to see you go '+firstName+'. Your account was succesfully deleted.');
+        }
+        catch(err)
+        {
+            alert('SORRY your account could not be deleted');
+        }
+    }
 }
