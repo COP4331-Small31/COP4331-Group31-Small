@@ -1,9 +1,6 @@
 const urlBase = 'http://31contacts.tk/';
 const extension = 'php';
 
-// INSECURE IMPLEMENTATION OF ACCESS CONTROL ALLOWED ORIGIN HEADERS
-//res.setHeader("Access-Control-Allow-Origin", "*");
-
 let userId = 0;
 let firstName = "";
 let lastName = "";
@@ -15,15 +12,12 @@ function doLogin()
 	lastName = "";
 
 	let login = document.getElementById("loginName").value;
-//	alert(login);
 	let password = document.getElementById("loginPassword").value;
 	var hash = md5( password );
-//	alert(password);
 
 	document.getElementById("loginResult").innerHTML = "";
 
 	let tmp = {login:login,password:hash};
-//	var tmp = {login:login,password:hash};
 	let jsonPayload = JSON.stringify( tmp );
 
 	let url = urlBase + 'LAMPAPI/Login.' + extension;
@@ -31,9 +25,6 @@ function doLogin()
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", url, true);
 	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
-
-// THIS IS INSECURE?
-//	xhr.setRequestHeader("Access-Control-Allow-Origin", url);
 
 	try
 	{
@@ -92,7 +83,6 @@ function doRegister()
 		    document.getElementById("registerResult").innerHTML = "";
 
 		    let tmp = {firstName:firstName,lastName:lastName,login:login,password:hash};
-		//    var tmp = {login:login,password:hash};
 		    let jsonPayload = JSON.stringify( tmp );
 
 		    let url = urlBase + 'LAMPAPI/Register.' + extension;
@@ -100,26 +90,13 @@ function doRegister()
 		    let xhr = new XMLHttpRequest();
 		    xhr.open("POST", url, true);
 		    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
-		    // xhr.setRequestHeader("Access-Control-Allow-Origin", url);
 		    try
 		    {
 		        xhr.onreadystatechange = function()
 		        {
 		            if (this.readyState == 4 && this.status == 200)
 		            {
-		//                let jsonObject = JSON.parse( xhr.responseText );
-		//                userId = jsonObject.id;
-
-		//                if( userId > 0 )
-		//                {
 		                  document.getElementById("registerResult").innerHTML = "Your account has been created!";
-		//                    return;
-		//                }
-
-		//                firstName = jsonObject.firstName;
-		//                lastName = jsonObject.lastName;
-
-		//                saveCookie();
 
 		                  window.location.href = "index.html";
 		            }
@@ -262,8 +239,6 @@ function searchContacts()
 
 				// This section takes care of formatting the HTML for the contacts list
 				let contactsListElement = document.getElementById("contactsList");
-				// .appendChild(document.createElement("div"));
-				// contactslistelement.setAttribute("class", "contactslist");
 
 				let e = document.querySelector('#contactsList');
 
@@ -284,7 +259,6 @@ function searchContacts()
 
 					let firstNameElement = contactElement.appendChild(document.createElement("div"));
 					firstNameElement.setAttribute("style", "width: 200px; float:left; height:50px; margin:10px");
-					// firstnameelement.setAttribute("style", "width: 200px; float:left; height:50px; background:CYAN; margin:10px");
 					firstNameElement.setAttribute("id", "firstName");
 					firstNameElement.innerHTML = jsonObject.results[i].firstName;
 
@@ -293,10 +267,12 @@ function searchContacts()
 					lastNameElement.setAttribute("id", "lastName");
 					lastNameElement.innerHTML = jsonObject.results[i].lastName;
 
-					let emailElement = contactElement.appendChild(document.createElement("div"));
+					let emailElement = contactElement.appendChild(document.createElement("a"));
 					emailElement.setAttribute("style", "width: 450px; float:left; height:50px; margin:10px");
 					emailElement.setAttribute("id", "email");
+					emailElement.href = "mailto:" + jsonObject.results[i].email;
 					emailElement.innerHTML = jsonObject.results[i].email;
+					emailElement.click();
 
 					let phoneElement = contactElement.appendChild(document.createElement("div"));
 					phoneElement.setAttribute("style", "width: 200px; float:left; height:50px; margin:10px");
@@ -313,5 +289,34 @@ function searchContacts()
 	{
 		document.getElementById("contactsSearchResult").innerHTML = err.message;
 	}
+
+}
+
+function doDeleteUser(){
+
+                        var result = confirm('Are you sure you want to delete your account?');
+                        if (result==true){
+                                readCookie();
+                                let tmp = {firstName:firstName,id:userId};
+                                let jsonPayload = JSON.stringify( tmp );
+
+                                let url = urlBase + 'LAMPAPI/DeleteUser.' + extension;
+
+                                let xhr = new XMLHttpRequest();
+                                xhr.open("POST", url, true);
+                                xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+
+                                try
+                                {
+                                        xhr.send(jsonPayload);
+                                        window.location.href = "index.html";
+					alert('Sorry to see you go '+firstName+'. Your account was succesfully deleted.');
+                                }
+                                catch(err)
+                                {
+                                        alert('SORRY your account could not be deleted');
+                                }
+ 
+                        }
 
 }
