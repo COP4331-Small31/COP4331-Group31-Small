@@ -1,6 +1,6 @@
 <?php
 	$inData = getRequestInfo();
-	
+
 	$UID = $inData["UID"]; 
 	$firstName = $inData["firstName"];
 	$lastName = $inData["lastName"];
@@ -18,26 +18,32 @@
 		$stmt->bind_param("sss", $id, $login, $password);
 		$stmt->execute(); */
 
-		if (isset($firstName))
+		if (!empty($firstName))
 		{
 			$stmt = $conn->prepare("UPDATE Contacts SET FirstName=? WHERE UID=?");
 			$stmt->bind_param("ss", $firstName, $UID);
 			$stmt->execute();
 		}
 
-		if (isset($lastName))
+		if (!empty($lastName))
 		{
-
+			$stmt = $conn->prepare("UPDATE Contacts SET LastName=? WHERE UID=?");
+			$stmt->bind_param("ss", $lastName, $UID);
+			$stmt->execute();
 		}
 
-		if (isset($email))
+		if (!empty($email))
 		{
-			
+			$stmt = $conn->prepare("UPDATE Contacts SET Email=? WHERE UID=?");
+			$stmt->bind_param("ss", $email, $UID);
+			$stmt->execute();
 		}
 
-		if (isset($phone))
+		if (!empty($phone))
 		{
-			
+			$stmt = $conn->prepare("UPDATE Contacts SET Phone=? WHERE UID=?");
+			$stmt->bind_param("ss", $phone, $UID);
+			$stmt->execute();
 		}
 
 		$conn->close();
