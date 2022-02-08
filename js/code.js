@@ -1,9 +1,6 @@
 const urlBase = 'http://31contacts.tk/';
 const extension = 'php';
 
-// INSECURE IMPLEMENTATION OF ACCESS CONTROL ALLOWED ORIGIN HEADERS
-//res.setHeader("Access-Control-Allow-Origin", "*");
-
 let userId = 0;
 let firstName = "";
 let lastName = "";
@@ -28,9 +25,6 @@ function doLogin()
 	let xhr = new XMLHttpRequest();
 	xhr.open("POST", url, true);
 	xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
-
-// THIS IS INSECURE?
-//	xhr.setRequestHeader("Access-Control-Allow-Origin", url);
 
 	try
 	{
@@ -89,7 +83,6 @@ function doRegister()
 		    document.getElementById("registerResult").innerHTML = "";
 
 		    let tmp = {firstName:firstName,lastName:lastName,login:login,password:hash};
-		//    var tmp = {login:login,password:hash};
 		    let jsonPayload = JSON.stringify( tmp );
 
 		    let url = urlBase + 'LAMPAPI/Register.' + extension;
@@ -97,26 +90,15 @@ function doRegister()
 		    let xhr = new XMLHttpRequest();
 		    xhr.open("POST", url, true);
 		    xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
-		    // xhr.setRequestHeader("Access-Control-Allow-Origin", url);
 		    try
 		    {
 		        xhr.onreadystatechange = function()
 		        {
 		            if (this.readyState == 4 && this.status == 200)
 		            {
-		//                let jsonObject = JSON.parse( xhr.responseText );
-		//                userId = jsonObject.id;
 
-		//                if( userId > 0 )
-		//                {
 		                  document.getElementById("registerResult").innerHTML = "Your account has been created!";
-		//                    return;
-		//                }
 
-		//                firstName = jsonObject.firstName;
-		//                lastName = jsonObject.lastName;
-
-		//                saveCookie();
 
 		                  window.location.href = "index.html";
 		            }
@@ -184,13 +166,62 @@ function doLogout()
 	window.location.href = "index.html";
 }
 
-function doGoToUpdate()
+function doGoToUpdateContact(string, el)
 {
-        userId = 0;
-        firstName = "";
-        lastName = "";
-        document.cookie = "firstName= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
-        window.location.href = "update.html";
+	let oldFirstName = "";
+	let oldLastName = "";
+	let oldEmail = "";
+	let oldPhone = "";
+	let UID="";
+
+	let contactElem = el.parentElement.parentElement;
+	oldFirstName = contactElem.querySelector('#firstName').innerHTML;
+	oldLastName = contactElem.querySelector('#lastName').innerHTML;
+	oldEmail = contactElem.getElementsByTagName('a')[0].innerHTML;
+	oldPhone = contactElem.querySelector('#phone').innerHTML;
+	UID = el.parentElement.id;
+
+
+	window.sessionStorage.setItem('contactFirstName',oldFirstName);
+	window.sessionStorage.setItem('contactLastName',oldLastName);
+	window.sessionStorage.setItem('contactEmail',oldEmail);
+	window.sessionStorage.setItem('contactPhone',oldPhone);
+	window.sessionStorage.setItem('contactUID',UID);
+
+	window.location.href = "updateContacts.html";
+
+}
+
+function contactsAutoFill()
+{
+	document.getElementById("newFirstName").setAttribute('value', window.sessionStorage.getItem('contactFirstName'));
+	document.getElementById("newLastName").setAttribute('value', window.sessionStorage.getItem('contactLastName'));
+	document.getElementById("newEmail").setAttribute('value', window.sessionStorage.getItem('contactEmail'));
+	document.getElementById("newPhone").setAttribute('value', window.sessionStorage.getItem('contactPhone'));
+}
+
+function justReadCookie()
+{
+	userId = -1;
+	let data = document.cookie;
+	let splits = data.split(",");
+	for(var i = 0; i < splits.length; i++)
+	{
+		let thisOne = splits[i].trim();
+		let tokens = thisOne.split("=");
+		if( tokens[0] == "firstName" )
+		{
+			firstName = tokens[1];
+		}
+		else if( tokens[0] == "lastName" )
+		{
+			lastName = tokens[1];
+		}
+		else if( tokens[0] == "userId" )
+		{
+			userId = parseInt( tokens[1].trim() );
+		}
+	}
 }
 
 function addContact()
@@ -201,6 +232,8 @@ function addContact()
 	let phone = document.getElementById("newPhone").value;
 
 	document.getElementById("contactAddResult").innerHTML = "";
+
+	justReadCookie();
 
 	if (firstName!="" && lastName!="" && email!="" && phone!="") {
 	  let tmp = {user:userId, firstName:firstName, lastName:lastName, email:email, phone:phone};
@@ -218,6 +251,7 @@ function addContact()
 				if (this.readyState == 4 && this.status == 200)
 				{
 					document.getElementById("contactAddResult").innerHTML = "Contact has been added";
+					window.location.href = "contacts.html";
 				}
 			};
 			xhr.send(jsonPayload);
@@ -253,7 +287,6 @@ function searchContacts()
 		{
 			if (this.readyState == 4 && this.status == 200)
 			{
-				// document.getElementById("contactsSearchResult").innerHTML = "Contact(s) have been retrieved";
 				let jsonObject = JSON.parse( xhr.responseText );
 
 				// This section takes care of formatting the HTML for the contacts list
@@ -310,12 +343,12 @@ function searchContacts()
 						phoneElement.innerHTML = phoneNumber.substring(0, 3) + "-" + phoneNumber.substring(3, 6) + "-" + phoneNumber.substring(6, 10);
 
 						let updateElement = contactElement.appendChild(document.createElement("td"));
-						updateElement.setAttribute("id", "update");
+						updateElement.setAttribute("id", jsonObject.results[i].UID);
 						let updateButton = updateElement.appendChild(document.createElement("button"));
 						updateButton.setAttribute("type", "button");
 						updateButton.setAttribute("id", "editContactButton");
 						updateButton.setAttribute("class", "edit-button");
-						updateButton.setAttribute("onclick", "doGoToUpdateContact();");
+						updateButton.setAttribute("onclick", "doGoToUpdateContact('update',this);");
 						updateButton.innerHTML = "Edit";
 					}
 				} else {
@@ -334,11 +367,12 @@ function searchContacts()
 
 }
 
-function doDeleteUser(){
+function doDeleteUser()
+{
     var result = confirm('Are you sure you want to delete your account?');
     if (result == true){
         readCookie();
-        let tmp = {firstname:firstName,id:userId};
+        let tmp = {firstName:firstName,id:userId};
         let jsonPayload = JSON.stringify( tmp );
 
         let url = urlBase + 'LAMPAPI/DeleteUser.' + extension;
@@ -358,4 +392,52 @@ function doDeleteUser(){
             alert('SORRY your account could not be deleted');
         }
     }
+}
+
+function doGoToAddContact()
+{
+        window.location.href = "createContacts.html";
+}
+
+function doUpdateContact()
+{
+	let UID = window.sessionStorage.getItem('contactUID');
+	let newFirstName = document.getElementById("newFirstName").value;
+        let newLastName = document.getElementById("newLastName").value;
+        let newEmail =  document.getElementById("newEmail").value;
+        let newPhone =  document.getElementById("newPhone").value.replaceAll('-','');
+
+        document.getElementById("loginResult").innerHTML = "";
+
+        justReadCookie();
+
+        if (newFirstName!="" && newLastName!="" && newEmail!="" && newPhone!="") {
+          let tmp = {UID:UID, firstName:newFirstName, lastName:newLastName, email:newEmail, phone:newPhone};
+                let jsonPayload = JSON.stringify( tmp );
+
+                let url = urlBase + 'LAMPAPI/UpdateContact.' + extension;
+
+                let xhr = new XMLHttpRequest();
+                xhr.open("POST", url, true);
+                xhr.setRequestHeader("Content-type", "application/json; charset=UTF-8");
+                try
+                {
+                        xhr.onreadystatechange = function()
+                        {
+                                if (this.readyState == 4 && this.status == 200)
+                                {
+                                        document.getElementById("loginResult").innerHTML = "Contact has been updated!";
+                                        window.location.href = "contacts.html";
+                                }
+                        };
+                        xhr.send(jsonPayload);
+                }
+                catch(err)
+                {
+                        document.getElementById("loginResult").innerHTML = err.message;
+                }
+        } else {
+                document.getElementById("loginResult").innerHTML = "Looks like some contact info is missing!";
+        }
+
 }

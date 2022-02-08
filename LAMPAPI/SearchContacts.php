@@ -13,7 +13,7 @@
 	else
 	{
 		// currently searches first name
-		$stmt = $conn->prepare("select FirstName, LastName, Email, Phone from Contacts where (FirstName like ? or LastName like ? or Email like ? or Phone like ?) and User=?");
+		$stmt = $conn->prepare("select UID, FirstName, LastName, Email, Phone from Contacts where (FirstName like ? or LastName like ? or Email like ? or Phone like ?) and User=?");
 		$search = "%" . $inData["search"] . "%";
 		$stmt->bind_param("sssss", $search, $search, $search, $search, $inData["user"]);
 		$stmt->execute();
