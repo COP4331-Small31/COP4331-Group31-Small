@@ -168,6 +168,11 @@ function doLogout()
 	alert('Logged out!');
 }
 
+function doGoToHomepage()
+{
+	window.location.href = "index.html";
+}
+
 function doDeleteUser()
 {
     var result = confirm('Are you sure you want to delete your account?');
